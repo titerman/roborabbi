@@ -4,8 +4,14 @@ const https = require('https');
 const http = require('http');
 const moment = require('moment');
 
-const envariables = dotenv.config();
-const envs = envariables.parsed;
+const dotEnv = dotenv.config({silent: true});
+let envariables;
+
+if (dotEnv) {
+    envariables = dotEnv;
+} else {
+    envariables = process.env;
+}
 
 const client = new Discord.Client();
 
@@ -65,7 +71,7 @@ const requestZmanim = (geoid, onSuccess, msg) => {
 };
 
 const cityLookup = (city, onSuccess, furtherAction, msg) => {
-    const REQUEST_URL = `${GEONAMES_URL}${city}&username=${envs.GEONAMES_USERNAME}`;
+    const REQUEST_URL = `${GEONAMES_URL}${city}&username=${envariables.GEONAMES_USERNAME}`;
     http.get(REQUEST_URL, (resp) => {
         let data = '';
         resp.on('data', (chunk) => {
@@ -152,4 +158,4 @@ client.on('message', msg => {
     }
 });
 
-client.login(envs.BOT_KEY);
+client.login(envariables.BOT_KEY);

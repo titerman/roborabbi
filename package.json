@@ -12,6 +12,7 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "eslint-plugin-node": "^11.1.0",
     "moment": "^2.25.3"
   },
   "engines": {
