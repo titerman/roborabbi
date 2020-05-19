@@ -1,17 +1,10 @@
-const dotenv = require('dotenv');
 const Discord = require('discord.js');
 const https = require('https');
 const http = require('http');
 const moment = require('moment');
 
-const dotEnv = dotenv.config({silent: true});
-let envariables;
+require('dotenv').config({silent: true});
 
-if (dotEnv) {
-    envariables = dotEnv;
-} else {
-    envariables = process.env;
-}
 
 const client = new Discord.Client();
 
@@ -23,7 +16,11 @@ const SEARCH_URL = 'https://www.sefaria.org';
 const searchSefaria = (query, msg) => {
     const REQUEST_URL = `${SEARCH_URL}/${query}`;
     https.get(REQUEST_URL, (resp) => {
+        resp.on('data', () => {
+            // doesn't matter
+        });
         resp.on('end', () => {
+            console.log(`${resp.headers.location}`);
             if (resp.headers.location) {
                 msg.channel.send(`${query} ${SEARCH_URL}${resp.headers.location}`);
                 return;
@@ -71,7 +68,7 @@ const requestZmanim = (geoid, onSuccess, msg) => {
 };
 
 const cityLookup = (city, onSuccess, furtherAction, msg) => {
-    const REQUEST_URL = `${GEONAMES_URL}${city}&username=${envariables.GEONAMES_USERNAME}`;
+    const REQUEST_URL = `${GEONAMES_URL}${city}&username=${process.env.GEONAMES_USERNAME}`;
     http.get(REQUEST_URL, (resp) => {
         let data = '';
         resp.on('data', (chunk) => {
@@ -154,8 +151,9 @@ client.on('message', msg => {
     } 
     else if (msg.content.match(/.*\[.*\]/g)) {
         const matches = msg.content.match(/\[(.*?)\]/g);
+
         matches.forEach(element => searchSefaria(element.substr(1, element.length - 2), msg));
     }
 });
 
-client.login(envariables.BOT_KEY);
+client.login(process.env.BOT_TOKEN);
