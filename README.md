@@ -12,7 +12,7 @@ Jewish Discord bot
 * Set the `BOT_TOKEN` environment variable
 * Create a Geonames.com user account
 * Set the `GEONAMES_USERNAME` environment variable
-* `node i`
+* `npm i`
 * `npm start`
 
 **Commands:**
